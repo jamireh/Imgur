@@ -1,0 +1,92 @@
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.codegen.DefaultGenerator
+
+apply plugin: 'java-library'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'io.swagger:swagger-codegen:2.3.0'
+    }
+}
+
+def imgurInputSpec = "${project.rootDir.path}" + "/imgur.yaml"
+def genOutputDir = file("build/swagger")
+def defaultPackage = "com.jonamireh.imgur"
+def defaultPackagePath = "com/jonamireh/imgur/client"
+task generateApi {
+    inputs.file(imgurInputSpec)
+    outputs.dir(genOutputDir)
+    doLast {
+        def config = new CodegenConfigurator()
+        def basePackage = "${defaultPackage}".toString()
+        config.setInputSpec(imgurInputSpec)
+        config.setOutputDir(genOutputDir.path)
+        config.setLang('java')
+        config.setSkipOverwrite true
+        config.setAdditionalProperties([
+                'invokerPackage'         : basePackage + ".client.service",
+                'modelPackage'           : basePackage + ".client.model",
+                'apiPackage'             : basePackage + ".client.api",
+                'dateLibrary'            : 'threeten',
+                'library'                : 'retrofit2',
+                'useRxJava2'             : true,
+                'hideGenerationTimestamp': true,
+                'serializableModel'      : true,
+                'supportJava6'           : true,
+        ])
+        config.setSystemProperties([
+                'models'         : "",
+                'apis'           : "",
+                'supportingFiles': "ApiClient.java,ApiException.java,Configuration.java,JSON.java,Pair.java,StringUtil.java,TypeRef.java,ApiKeyAuth.java,Authentication.java,HttpBasicAuth.java,OAuth.java,OAuthFlow.java,CollectionFormats.java,OAuthOkHttpClient.java",
+                'invokers'       : "",
+                'apiTests'       : "false",
+                'modelTests'     : "false",
+                'modelDocs'      : "false",
+                'apiDocs'        : "false"
+        ])
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+configurations {
+    swagger
+}
+
+sourceSets {
+    swagger {
+        compileClasspath = configurations.swaggerCompile
+        java {
+            srcDir file("${project.buildDir.path}/swagger/src/main/java")
+        }
+    }
+}
+
+compileSwaggerJava.dependsOn generateApi
+classes.dependsOn swaggerClasses
+compileJava.dependsOn compileSwaggerJava
+
+task cleanSwagger(type: Delete) {
+    delete project.buildDir.path
+}
+clean.dependsOn cleanSwagger
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    swaggerCompile deps.retrofit
+    swaggerCompile deps.retrofitConverterScalars
+    swaggerCompile deps.retrofitConverterGson
+    swaggerCompile deps.retrofitAdapter
+    swaggerCompile deps.rxjava
+    swaggerCompile deps.gson
+    swaggerCompile deps.gsonFire
+    swaggerCompile deps.swaggerAnnotations
+    swaggerCompile deps.apacheOltu
+    compile sourceSets.swagger.output
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

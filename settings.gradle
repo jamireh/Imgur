@@ -1,0 +1,3 @@
+include ':app', ':imgur-client-api'
+File clientApiRoot = new File('.')
+project(':imgur-client-api').projectDir = new File(clientApiRoot, 'imgur-client-api')

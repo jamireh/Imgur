@@ -1,0 +1,12 @@
+build.gradle
+build.sbt
+docs/*
+git_push.sh
+gradle
+gradle.properties
+gradlew
+gradlew.bat
+pom.xml
+README.md
+settings.gradle
+src/AndroidManifest.xml

@@ -1,0 +1,73 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.versions = [
+            'compileSdk': 26,
+            'buildTools': '26.0.2',
+            'minSdk': 19,
+            'targetSdk': 27,
+
+            'kotlin': '1.1.51',
+            'supportLibrary': '26.0.2',
+            'retrofit': '2.3.0',
+            'gson': '2.8.2',
+            'rxjava': '2.1.8',
+            'leakCanary': '1.5.1',
+            'espresso': '2.2.2',
+
+            'apacheOltu': '1.0.1',
+            'gsonFire': '1.8.0',
+            'swaggerAnnotations': '1.5.15'
+    ]
+
+    ext.deps = [
+            'kotlin': "org.jetbrains.kotlin:kotlin-stdlib-jre7:${versions.kotlin}",
+            'support': [
+                    'annotations': "com.android.support:support-annotations:${versions.supportLibrary}",
+                    'v4': "com.android.support:support-v4:${versions.supportLibrary}",
+                    'appCompat': "com.android.support:appcompat-v7:${versions.supportLibrary}",
+                    'design': "com.android.support:design:${versions.supportLibrary}",
+                    'recyclerView': "com.android.support:recyclerview-v7:${versions.supportLibrary}",
+            ],
+            'timber': 'com.jakewharton.timber:timber:4.5.1',
+            'leakCanary': [
+                    'real': "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}",
+                    'noOp': "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakCanary}",
+            ],
+            'retrofit': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+            'retrofitConverterGson': "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+            'retrofitConverterScalars': "com.squareup.retrofit2:converter-scalars:${versions.retrofit}",
+            'retrofitAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
+            'rxjava': "io.reactivex.rxjava2:rxjava:${versions.rxjava}",
+            'gson': "com.google.code.gson:gson:${versions.gson}",
+            'threeTenAbp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
+            'junit': 'junit:junit:4.12',
+            'espresso': [
+                    'core': "com.android.support.test.espresso:espresso-core:${versions.espresso}",
+                    'contrib': "com.android.support.test.espresso:espresso-contrib:${versions.espresso}",
+            ],
+            'gsonFire': "io.gsonfire:gson-fire:${versions.gsonFire}",
+            'swaggerAnnotations': "io.swagger:swagger-annotations:${versions.swaggerAnnotations}",
+            'apacheOltu': "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:${versions.apacheOltu}"
+    ]
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
